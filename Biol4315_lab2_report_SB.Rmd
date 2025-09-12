@@ -5,26 +5,30 @@ date: "2025-09-11"
 output: html_document
 ---
 
-```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE)
-```
+# Long read QC summary exercise
 
-## R Markdown
+# Bash code chunck
+# Use conda to install filtlong package
+```{bash, eval=FALSE}
+conda install filtlong
 
-This is an R Markdown document. Markdown is a simple formatting syntax for authoring HTML, PDF, and MS Word documents. For more details on using R Markdown see <http://rmarkdown.rstudio.com>.
+# Filter the long read fastq file to keep the longest 75% of the sequesnce
+filtlong -p 75 ERR1539001.fastq > output/ERR1539001_75filtered.fastq
 
-When you click the **Knit** button a document will be generated that includes both content as well as the output of any embedded R code chunks within the document. You can embed an R code chunk like this:
+# Run Sequali on the filtered file
+sequali --outdir ./sequali_reports ./output/ERR1539001_75filtered.fastq
 
-```{r cars}
-summary(cars)
-```
 
-## Including Plots
+# Brief description of changes after filtration
 
-You can also embed plots, for example:
+# N50 is better compred to the non filtered file, it went from 6681 to 7371
 
-```{r pressure, echo=FALSE}
-plot(pressure)
-```
+# Most reads are longer than 2000 bp, the 1st percentile is at 2424 which is higher than the 25th percentile from the unfiltered file
 
-Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.
+# The read length histogram is unimodel with a single peak, which is less wide than the unfiltered file but doesn't have the second small peak of smaller length reads the unfiltered file had
+
+# Average Q scores are all above 7 and the lowest is just below 20 whereas the unfiltered file some Q scores went below 10.
+
+# The bese-level quality is relatively flat and does not drop sharply, more flat than the unfiltered file
+
+# this sequence run is of better quality than the unfiltered file and I would use it in down stream analysis
