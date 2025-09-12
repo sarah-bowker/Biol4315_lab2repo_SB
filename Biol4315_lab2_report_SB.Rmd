@@ -5,21 +5,21 @@ date: "2025-09-11"
 output: html_document
 ---
 
-# Long read QC summary exercise
+# 2. Long read QC summary exercise
 
 # Bash code chunck
-# Use conda to install filtlong package
+# 3. Use conda to install filtlong package
 ```{bash, eval=FALSE}
 conda install filtlong
 
-# Filter the long read fastq file to keep the longest 75% of the sequesnce
+# 4. Filter the long read fastq file to keep the longest 75% of the sequesnce
 filtlong -p 75 ERR1539001.fastq > output/ERR1539001_75filtered.fastq
 
-# Run Sequali on the filtered file
+# 5. Run Sequali on the filtered file
 sequali --outdir ./sequali_reports ./output/ERR1539001_75filtered.fastq
 
 
-# Brief description of changes after filtration
+# 6. Brief description of changes after filtration
 
 # N50 is better compred to the non filtered file, it went from 6681 to 7371
 
@@ -32,3 +32,42 @@ sequali --outdir ./sequali_reports ./output/ERR1539001_75filtered.fastq
 # The bese-level quality is relatively flat and does not drop sharply, more flat than the unfiltered file
 
 # this sequence run is of better quality than the unfiltered file and I would use it in down stream analysis
+
+```
+
+# 8. Downloading illumina reads
+```{bash, eval=FALSE}
+
+wget -nc ftp://ftp.sra.ebi.ac.uk/vol1/fastq/ERR112/040/ERR11203340/ERR11203340_1.fastq.gz
+wget -nc ftp://ftp.sra.ebi.ac.uk/vol1/fastq/ERR112/040/ERR11203340/ERR11203340_2.fastq.gz
+```
+
+# 9. Sequence quality code chunck
+```{r, eval=FALSE}
+qcPbPc <- rqc(path = ".", pattern = "ERR11203340", openBrowser=FALSE)
+```
+
+# Sequence quality per base per cycle
+```{r, eval=FALSE}
+rqcCycleQualityBoxPlot(qcPbPc)
+
+# Quality score drops below 2 in cycle 101 of the first fastq file
+```
+
+# Sequence content per base per cycle
+```{r, eval=FALSE}
+rqcCycleBaseCallsLinePlot(qcPbPc)
+
+# Based on the plot there are no Ns, they stay at zero in all the cycles
+```
+
+# frequency plot
+```{r, eval=FALSE}
+rqcReadFrequencyPlot(qcPbPc)
+
+# Based on the frequency plot most sequences have one read 
+```
+
+# 10. Trim reads based on quality scores 
+```{r, eval=FALSE}
+```
