@@ -13,10 +13,10 @@ output: html_document
 conda install filtlong
 
 # 4. Filter the long read fastq file to keep the longest 75% of the sequesnce
-filtlong -p 75 ERR1539001.fastq > output/ERR1539001_75filtered.fastq
+filtlong -p 75 ERR1539001.fastq > ./ERR1539001_75filtered.fastq
 
 # 5. Run Sequali on the filtered file
-sequali --outdir ./sequali_reports ./output/ERR1539001_75filtered.fastq
+sequali --outdir ./sequali_reports ./ERR1539001_75filtered.fastq
 
 
 # 6. Brief description of changes after filtration
