@@ -68,7 +68,7 @@ rqcReadFrequencyPlot(qcPbPc)
 # Based on the frequency plot most sequences have one read 
 ```
 
-# 10. Trim reads based on quality scores 
+# 10. Trim reads based on quality scores - I couldn't find a way to make QuasR::preprocessReads() work so I ended up finding trimTailw from ShortReads that achived what we needed.
 ```{r, eval=FALSE}
 # Trim 3' end where quality < Q20 using ShortRead
 library(ShortRead)

@@ -37,3 +37,21 @@ qc_report(qc.file, result.file = "one-sample-report",
           interpret = TRUE)
 
 
+library(ShortRead)
+
+# Read the FASTQ file
+fq <- readFastq("ERR11203340_1.fastq.gz")
+
+# Trim from 3' end where quality ASCII < "5" (Q20)
+fq_trimmed <- trimTailw(fq, k = 2, a = "5", halfwidth = 2)
+
+# Save the trimmed reads
+writeFastq(fq_trimmed, "ERR11203340_1_trimmed.fastq.gz", compress = TRUE)
+
+# Run QC on trimmed reads
+qc_trimmed <- rqc(path = ".", pattern = "ERR11203340_1_trimmed.fastq.gz", openBrowser = FALSE)
+
+# Plot per-base quality after trimming
+rqcCycleQualityBoxPlot(qc_trimmed)
+
+
